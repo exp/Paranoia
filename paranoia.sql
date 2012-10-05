@@ -10,9 +10,15 @@ SET client_min_messages = warning;
 
 SET search_path = public, pg_catalog;
 
+ALTER TABLE ONLY public.first_names DROP CONSTRAINT first_names_fkey_countries;
+ALTER TABLE ONLY public.first_names DROP CONSTRAINT first_names_pkey;
+ALTER TABLE ONLY public.first_names DROP CONSTRAINT first_name_unique_name;
 ALTER TABLE ONLY public.countries DROP CONSTRAINT countries_unique_name;
 ALTER TABLE ONLY public.countries DROP CONSTRAINT countries_pkey;
+ALTER TABLE public.first_names ALTER COLUMN id DROP DEFAULT;
 ALTER TABLE public.countries ALTER COLUMN id DROP DEFAULT;
+DROP SEQUENCE public.first_names_id_seq;
+DROP TABLE public.first_names;
 DROP SEQUENCE public.countries_id_seq;
 DROP TABLE public.countries;
 DROP EXTENSION plpgsql;
@@ -103,10 +109,51 @@ ALTER SEQUENCE countries_id_seq OWNED BY countries.id;
 
 
 --
+-- Name: first_names; Type: TABLE; Schema: public; Owner: paul; Tablespace: 
+--
+
+CREATE TABLE first_names (
+    id integer NOT NULL,
+    country integer NOT NULL,
+    name text NOT NULL
+);
+
+
+ALTER TABLE public.first_names OWNER TO paul;
+
+--
+-- Name: first_names_id_seq; Type: SEQUENCE; Schema: public; Owner: paul
+--
+
+CREATE SEQUENCE first_names_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.first_names_id_seq OWNER TO paul;
+
+--
+-- Name: first_names_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: paul
+--
+
+ALTER SEQUENCE first_names_id_seq OWNED BY first_names.id;
+
+
+--
 -- Name: id; Type: DEFAULT; Schema: public; Owner: paul
 --
 
 ALTER TABLE ONLY countries ALTER COLUMN id SET DEFAULT nextval('countries_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: paul
+--
+
+ALTER TABLE ONLY first_names ALTER COLUMN id SET DEFAULT nextval('first_names_id_seq'::regclass);
 
 
 --
@@ -123,6 +170,30 @@ ALTER TABLE ONLY countries
 
 ALTER TABLE ONLY countries
     ADD CONSTRAINT countries_unique_name UNIQUE (name);
+
+
+--
+-- Name: first_name_unique_name; Type: CONSTRAINT; Schema: public; Owner: paul; Tablespace: 
+--
+
+ALTER TABLE ONLY first_names
+    ADD CONSTRAINT first_name_unique_name UNIQUE (country, name);
+
+
+--
+-- Name: first_names_pkey; Type: CONSTRAINT; Schema: public; Owner: paul; Tablespace: 
+--
+
+ALTER TABLE ONLY first_names
+    ADD CONSTRAINT first_names_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: first_names_fkey_countries; Type: FK CONSTRAINT; Schema: public; Owner: paul
+--
+
+ALTER TABLE ONLY first_names
+    ADD CONSTRAINT first_names_fkey_countries FOREIGN KEY (country) REFERENCES countries(id) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
