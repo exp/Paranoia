@@ -1,5 +1,23 @@
 Please have your layout generator include methods:
-- adjacent(firstroom, secondroom) returns true if two roomsare connected directly
+- adjacent(firstroom, secondroom) returns true if two rooms are connected directly
+- traversible(firstroom, secondroom) returns true if two rooms are connected by a path
+- walladjacent(firstroom, secondroom) returns true if two rooms are next to each other but are not directly connected
 - windowside(room) returns true if a room has windows or entrances facing the outside of the building
 - stairadjacent(room) returns true if a room has direct access to a staircase or elevator
-Ill think of more in a while
+- size(room) returns the amount of space a room occupies on the flood and should not exceed maximum size we will agree on and test for
+- space(room) returns the amount of utility space in a room that can be occupied by a. people b. equipment c. decorations d. partition walls
+- flammable(room) returns true if a room should be equipped with fire safety equipment that will take up an agreed utility size
+
+Tests:
+- a room should always be adjacent to either another room or a staircase/elevator
+- two rooms of the same type can only be adjacent if they are specific whitelisted rooms (like offices, not kitchens)
+- there can be no set of rooms that is not accessible from a staircase
+- ground floor should contain a reception area and an extra set of public bathrooms
+
+Constants:
+- If we set maximum floor size to be 150sqm we have to make sure it contains at least one workspace (office, cubicle) and one toilet in it, a staircase/elevator
+- cubicle size is 4sqm minimum
+- office size is 12sqm minimum
+- toilet sizes can be 12sqm for male toilet and 20sqm for women+disabled toilet OR 18sqm for unisex toilet
+- kitchen can be of minimum size 12sqm maximum size 20sqm
+- walls are 50cm thick for outer and structural walls and 20cm for partition walls minimum
