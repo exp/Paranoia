@@ -1,0 +1,5 @@
+Please have your layout generator include methods:
+- adjacent(firstroom, secondroom) returns true if two roomsare connected directly
+- windowside(room) returns true if a room has windows or entrances facing the outside of the building
+- stairadjacent(room) returns true if a room has direct access to a staircase or elevator
+Ill think of more in a while
