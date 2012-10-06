@@ -63,6 +63,9 @@ for my $country (@$list) {
 for my $country (keys %names) {
 	say "Inserting names into " . $idtocountry{$country};
 	for my $name (@{$names{$country}}) {
+		# Strip out anything in parens
+		$name   =~ s/\s*\(.*$//;
+
 		my $sth = $dbh->prepare("INSERT INTO first_names (country, name) VALUES (?, ?)");
 		$sth->execute($country, $name);
 		$sth->finish;
